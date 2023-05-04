@@ -1,0 +1,39 @@
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
+# 发件人邮箱地址
+sender_email = "@163.com"
+# 发件人邮箱密码或授权码
+sender_password = "PKEGRAERGIVCKSQU"
+# 收件人邮箱地址，多个地址用逗号分隔
+recipient_emails = "sggzhang@whu.edu.cn"
+# 邮件主题
+subject = "邮件主题"
+# 邮件正文内容
+body = "邮件正文"
+# 邮件附件路径列表
+# attachment_paths = ["path/to/attachment1", "path/to/attachment2"]
+
+# 创建一个MIMEMultipart对象
+msg = MIMEMultipart()
+msg["From"] = sender_email
+msg["To"] = recipient_emails
+msg["Subject"] = subject
+
+# 添加邮件正文
+msg.attach(MIMEText(body, "plain", "utf-8"))
+
+# 添加附件
+# for attachment_path in attachment_paths:
+#     with open(attachment_path, "rb") as f:
+#         attachment_content = f.read()
+#     attachment = MIMEApplication(attachment_content)
+#     attachment.add_header("Content-Disposition", "attachment", filename=attachment_path.split("/")[-1])
+#     msg.attach(attachment)
+
+# 发送邮件
+with smtplib.SMTP_SSL("smtp.163.com", 465) as smtp:
+    smtp.login(sender_email, sender_password)
+    smtp.sendmail(sender_email, recipient_emails.split(","), msg.as_string())
